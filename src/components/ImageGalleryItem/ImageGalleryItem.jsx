@@ -5,8 +5,9 @@ import {
 import PropTypes from 'prop-types';
 
 export const ImageGaleryItem = ({ pictures, onModal }) => {
-  return pictures.map(
-    ({ id, webformatURL, largeImageURL }) => {
+  return (
+    pictures &&
+    pictures.map(({ id, webformatURL, largeImageURL }) => {
       return (
         <GalleryItem key={id}>
           <GalleryItemImage
@@ -16,7 +17,7 @@ export const ImageGaleryItem = ({ pictures, onModal }) => {
           />
         </GalleryItem>
       );
-    }
+    })
   );
 };
 
