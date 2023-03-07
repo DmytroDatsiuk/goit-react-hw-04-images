@@ -6,63 +6,39 @@ import { Modal } from './Modal/Modal';
 import { Searchbar } from './Searchbar/Searchbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import axios from 'axios';
+import { GetPictures } from 'Services/Api';
 
 export const App = () => {
   const [showModal, setShowModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [url, setUrl] = useState('');
   const [pictures, setPictures] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [status, setStatus] = useState('idle');
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    if (!searchQuery) {
+      return;
+    }
+
     (async () => {
       setIsLoading(true);
       try {
-        const params = {
-          key: '32602095-27dbade4d0732e174c3b141f5',
-          q: searchQuery,
-          image_type: 'photo',
-          orientation: 'horizontal',
-          safesearch: true,
-          per_page: 12,
-          page: page,
-        };
-
-        const response = await axios.get(
-          'https://pixabay.com/api/',
-          { params }
+        const response = await GetPictures(
+          searchQuery,
+          page
         );
-
-        setPictures([...response.data.hits]);
+        setPictures([...pictures, response.hits]);
         setStatus('resolve');
+        setIsLoading(false);
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [page, searchQuery]);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     setIsLoading(true);
-  //     try {
-  //       const picturesData = await GetPictures(
-  //         searchQuery,
-  //         page
-  //       );
-  //       console.log('hi');
-  //       setPictures([...picturesData.hits]);
-  //       setStatus('resolve');
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       setStatus('rejected');
-  //     }
-  //   })();
-  // }, []);
+  }, [page, pictures, searchQuery]);
 
   const toogleModal = url => {
     setShowModal(!showModal);

@@ -25,7 +25,7 @@ export const Searchbar = ({ onSearch }) => {
       toast.warn('Input search query');
       return;
     }
-
+    console.log('submit');
     onSearch(searchQuery);
   };
 

@@ -30,7 +30,7 @@ export const ImageGalery = ({
       {status === 'idle' && (
         <Descripton>Please Input Search Query</Descripton>
       )}
-      {pictures && (
+      {pictures.length !== 0 && (
         <>
           <ImageGallery>
             <ImageGaleryItem
