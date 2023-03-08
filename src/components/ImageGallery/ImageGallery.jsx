@@ -38,11 +38,7 @@ export const ImageGalery = ({
               pictures={pictures}
             />
           </ImageGallery>
-          {isLoading ? (
-            <Loader />
-          ) : (
-            <Button onClick={onClick} />
-          )}
+          {!isLoading && <Button onClick={onClick} />}
         </>
       )}
       {status === 'panding' && <Loader />}

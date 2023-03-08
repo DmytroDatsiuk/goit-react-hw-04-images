@@ -24,21 +24,26 @@ export const App = () => {
 
     (async () => {
       setIsLoading(true);
+      setStatus('panding');
       try {
         const response = await GetPictures(
           searchQuery,
           page
         );
-        setPictures([...pictures, response.hits]);
+        setPictures(state => [...state, ...response.hits]);
         setStatus('resolve');
         setIsLoading(false);
+
+        if (response.total === 0) {
+          setStatus('rejectedSearch');
+        }
       } catch (error) {
-        console.log(error);
+        setStatus('rejected');
       } finally {
         setIsLoading(false);
       }
     })();
-  }, [page, pictures, searchQuery]);
+  }, [page, searchQuery]);
 
   const toogleModal = url => {
     setShowModal(!showModal);
@@ -71,6 +76,7 @@ export const App = () => {
       {showModal && (
         <Modal onClose={toogleModal} url={url} />
       )}
+
       <ToastContainer autoClose={3000} theme={'colored'} />
     </Layout>
   );
